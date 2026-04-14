@@ -3,21 +3,32 @@ const fs = require('fs');
 const path = require('path');
 
 const MAX_WIDTH = 1920;
-const IMAGE_DIR = __dirname;
+const IMAGE_DIR = path.join(__dirname, 'images');
 const EXTENSIONS = ['.png', '.jpg', '.jpeg'];
 
+function collectImages(dir) {
+  const results = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectImages(fullPath));
+    } else if (EXTENSIONS.includes(path.extname(entry.name).toLowerCase())) {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
 async function run() {
-  const files = fs.readdirSync(IMAGE_DIR).filter(f =>
-    EXTENSIONS.includes(path.extname(f).toLowerCase())
-  );
+  const files = collectImages(IMAGE_DIR);
 
   if (files.length === 0) {
     console.log('No images found.');
     return;
   }
 
-  for (const file of files) {
-    const filePath = path.join(IMAGE_DIR, file);
+  for (const filePath of files) {
+    const file = path.relative(__dirname, filePath);
     const image = sharp(filePath);
     const { width } = await image.metadata();
 
