@@ -267,22 +267,29 @@
     }
 
     .card-photo-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
       gap: 4px;
       margin-top: 14px;
-      border-radius: 8px;
-      overflow: hidden;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
     }
 
     .strip-slot {
-      aspect-ratio: 1;
+      flex-shrink: 0;
+      width: 76px;
+      height: 76px;
       background: var(--accent-light);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
     }
+
+    .strip-slot:hover { opacity: 0.82; }
 
     .strip-slot img {
       width: 100%;
@@ -439,6 +446,117 @@
       letter-spacing: 0.05em;
     }
 
+    /* ── Lightbox ── */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-overlay.open { display: flex; }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+      animation: modalIn 0.2s ease;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      line-height: 1;
+      transition: background 0.15s;
+      z-index: 1;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+
+    .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    /* ── Modal gallery ── */
+    .modal-gallery {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .gallery-label {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 1rem;
+    }
+
+    .gallery-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .gallery-thumb {
+      flex-shrink: 0;
+      width: 130px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .gallery-thumb:hover { opacity: 0.82; }
+
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     @media (max-width: 600px) {
       .days-grid { grid-template-columns: 1fr; }
       header { padding: 2.5rem 1.25rem 2rem; }
@@ -481,10 +599,10 @@
           <p class="card-excerpt">All of the excitement was held in the unknown. We landed in Quito around 5am and watched the sunrise over the mountains — an exhausting, fun-filled first day of tourism and introductions...</p>
           <div class="card-tags"><span class="tag">Travel</span><span class="tag">Reflections</span><span class="tag">Ecuador</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot"><img src="Day1.1.png" alt="Day 1 photo 1" /></div>
-            <div class="strip-slot"><img src="Day1.2.png" alt="Day 1 photo 2" /></div>
-            <div class="strip-slot"><img src="Day1.3.png" alt="Day 1 photo 3" /></div>
-            <div class="strip-slot"><img src="Day1.4.png" alt="Day 1 photo 4" /></div>
+            <div class="strip-slot" onclick="openLightbox(0, 0, event)"><img src="Day1.1.png" alt="Day 1 photo 1" /></div>
+            <div class="strip-slot" onclick="openLightbox(0, 1, event)"><img src="Day1.2.png" alt="Day 1 photo 2" /></div>
+            <div class="strip-slot" onclick="openLightbox(0, 2, event)"><img src="Day1.3.png" alt="Day 1 photo 3" /></div>
+            <div class="strip-slot" onclick="openLightbox(0, 3, event)"><img src="Day1.4.png" alt="Day 1 photo 4" /></div>
           </div>
         </div>
       </article>
@@ -684,8 +802,17 @@
         <div class="modal-divider"></div>
         <div class="modal-body" id="modal-body"></div>
         <div class="modal-tags" id="modal-tags"></div>
+        <div class="modal-gallery" id="modal-gallery"></div>
       </div>
     </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox" onclick="handleLightboxClick(event)">
+    <button class="lightbox-close" onclick="closeLightbox(event)">&#x2715;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" onclick="lightboxPrev(event)">&#8249;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" onclick="lightboxNext(event)">&#8250;</button>
   </div>
 
   <footer>
@@ -699,6 +826,7 @@
         location: "Quito → San Miguel de Los Bancos, Ecuador",
         tags: ["Travel", "Reflections", "Ecuador"],
         coverImage: "Day1-Cover.png",
+        photos: ["Day1.1.png", "Day1.2.png", "Day1.3.png", "Day1.4.png"],
         body: `<p>As I was travelling on my two flights to Ecuador, I started to really think about why I wanted to come here. I didn't pick this trip. I didn't really know a lot about it because of the fast change of plans — and then I realized that's exactly why I was so excited.</p>
         <p>Because we were initially going to Bolivia, I had spent hours upon hours since May preparing: learning about the culture, customs, and the service work we'd be doing. Since I only had a little over a month to prepare for Ecuador, all of the excitement was held in the unknown. I could not wait to see what it had to offer.</p>
         <blockquote class="pull-quote">All of the excitement was held in the unknown — and that turned out to be the best reason to go.</blockquote>
@@ -805,6 +933,14 @@
       } else {
         photoEl.innerHTML = `<div class="photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:var(--accent)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg><span style="font-size:12px;color:var(--accent)">Add your photo here</span></div>`;
       }
+      const galleryEl = document.getElementById('modal-gallery');
+      if (e.photos && e.photos.length > 0) {
+        galleryEl.innerHTML = `<p class="gallery-label">Photos</p><div class="gallery-strip">${e.photos.map((photo, i) => `<div class="gallery-thumb" onclick="openLightbox(${index}, ${i})"><img src="${photo}" alt="Day ${e.day} photo ${i + 1}" /></div>`).join('')}</div>`;
+        galleryEl.style.display = 'block';
+      } else {
+        galleryEl.innerHTML = '';
+        galleryEl.style.display = 'none';
+      }
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -818,7 +954,65 @@
       if (e.target === document.getElementById('modal')) closeModal();
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    // ── Lightbox ──
+    let lightboxPhotos = [];
+    let lightboxIndex = 0;
+
+    function openLightbox(entryIndex, photoIndex, event) {
+      if (event) event.stopPropagation();
+      const photos = entries[entryIndex].photos;
+      if (!photos || photos.length === 0) return;
+      lightboxPhotos = photos;
+      lightboxIndex = photoIndex;
+      const img = document.getElementById('lightbox-img');
+      img.src = photos[photoIndex];
+      img.alt = 'Photo ' + (photoIndex + 1);
+      const prevBtn = document.getElementById('lightbox-prev');
+      const nextBtn = document.getElementById('lightbox-next');
+      prevBtn.style.display = photos.length > 1 ? 'flex' : 'none';
+      nextBtn.style.display = photos.length > 1 ? 'flex' : 'none';
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event) event.stopPropagation();
+      document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lightbox-img').src = '';
+      if (!document.getElementById('modal').classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleLightboxClick(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+
+    function lightboxPrev(event) {
+      if (event) event.stopPropagation();
+      lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+      const img = document.getElementById('lightbox-img');
+      img.src = lightboxPhotos[lightboxIndex];
+      img.alt = 'Photo ' + (lightboxIndex + 1);
+    }
+
+    function lightboxNext(event) {
+      if (event) event.stopPropagation();
+      lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+      const img = document.getElementById('lightbox-img');
+      img.src = lightboxPhotos[lightboxIndex];
+      img.alt = 'Photo ' + (lightboxIndex + 1);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('lightbox').classList.contains('open')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') lightboxPrev();
+        if (e.key === 'ArrowRight') lightboxNext();
+        return;
+      }
+      if (e.key === 'Escape') closeModal();
+    });
 
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
