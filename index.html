@@ -268,7 +268,7 @@
 
     .card-photo-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 4px;
       margin-top: 14px;
       border-radius: 8px;
@@ -322,7 +322,6 @@
       overflow: hidden;
       position: relative;
       animation: modalIn 0.25s ease;
-      min-height: 600px;
     }
 
     @keyframes modalIn {
@@ -444,136 +443,6 @@
       .days-grid { grid-template-columns: 1fr; }
       header { padding: 2.5rem 1.25rem 2rem; }
     }
-
-    /* ── Lightbox ── */
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(44,26,14,0.92);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-    .lightbox.open { display: flex; }
-    .lightbox-inner {
-      position: relative;
-      max-width: 860px;
-      width: 100%;
-    }
-    .lightbox-inner img {
-      width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
-      border-radius: 8px;
-      display: block;
-    }
-    .lightbox-placeholder {
-      width: 100%;
-      height: 400px;
-      background: var(--accent-light);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-      color: var(--accent);
-      font-family: 'League Spartan', sans-serif;
-      font-size: 13px;
-    }
-    .lightbox-caption {
-      margin-top: 12px;
-      text-align: center;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 13px;
-      color: rgba(250,246,241,0.7);
-      font-style: italic;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: -14px;
-      right: -14px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: none;
-      cursor: pointer;
-      color: white;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
-    }
-    .lightbox-close:hover { background: var(--accent-mid); }
-
-    /* ── Modal photo gallery ── */
-    .modal-gallery {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 0.5px solid var(--border);
-    }
-    .modal-gallery-label {
-      font-family: 'League Spartan', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: 12px;
-    }
-    .modal-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .modal-gallery-grid .cover-slot {
-      grid-column: 1 / -1;
-    }
-    .gallery-slot {
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--accent-light);
-      cursor: pointer;
-    }
-    .gallery-slot img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      display: block;
-      transition: opacity 0.2s;
-    }
-    .gallery-slot img:hover { opacity: 0.88; }
-    .cover-slot img {
-      height: 220px;
-    }
-    .gallery-slot .gallery-placeholder {
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 6px;
-      opacity: 0.35;
-    }
-    .cover-slot .gallery-placeholder { height: 220px; }
-    .gallery-placeholder svg { width: 22px; height: 22px; color: var(--accent); }
-    .gallery-placeholder span { font-size: 11px; color: var(--accent); font-family: 'League Spartan', sans-serif; }
-    .gallery-caption {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 11px;
-      font-style: italic;
-      color: var(--ink-faint);
-      padding: 6px 8px;
-      line-height: 1.4;
-    }
-
-    /* ── Strip slot clickable ── */
-    .strip-slot { cursor: pointer; }
-    .strip-slot:hover { opacity: 0.85; }
   </style>
 </head>
 <body>
@@ -603,10 +472,7 @@
       <!-- Day 1 -->
       <article class="day-card" data-tags="travel reflections" onclick="openModal(0)">
         <div class="card-photo">
-          <div class="photo-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
-            <span>Add photo</span>
-          </div>
+         <img src="Arrival-Cover.png" alt="Day 1 - Arrival" />
         </div>
         <div class="card-body">
           <div class="card-header"><span class="day-num">Day 1</span></div>
@@ -615,16 +481,10 @@
           <p class="card-excerpt">All of the excitement was held in the unknown. We landed in Quito around 5am and watched the sunrise over the mountains — an exhausting, fun-filled first day of tourism and introductions...</p>
           <div class="card-tags"><span class="tag">Travel</span><span class="tag">Reflections</span><span class="tag">Ecuador</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.1.png','Day 1 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.2.png','Day 1 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.3.png','Day 1 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.4.png','Day 1 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><img src="Arrival1.png" alt="Day 1 photo 1" /></div>
+            <div class="strip-slot"><img src="Arrival2.png" alt="Day 1 photo 2" /></div>
+            <div class="strip-slot"><img src="Arrival3.png" alt="Day 1 photo 3" /></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.2.png','Day 1 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.3.png','Day 1 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day1.4.png','Day 1 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -643,16 +503,10 @@
           <p class="card-excerpt">A presentation on Ecuador's culture, a farm with a philosophy unlike anything back home. As an NRES major, Nido de Vida's way of thinking resonated with me immediately...</p>
           <div class="card-tags"><span class="tag">Science</span><span class="tag">Culture</span><span class="tag">Agriculture</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.1.png','Day 2 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.2.png','Day 2 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.3.png','Day 2 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.4.png','Day 2 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.2.png','Day 2 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.3.png','Day 2 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day2.4.png','Day 2 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -671,16 +525,10 @@
           <p class="card-excerpt">At 5am, neighbor Don Roman began harvesting sugar cane to show us how panela is made. A lesson in craft, hard work, and a kind of happiness that doesn't translate to dollars...</p>
           <div class="card-tags"><span class="tag">Culture</span><span class="tag">Reflections</span><span class="tag">Agriculture</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.1.png','Day 3 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.2.png','Day 3 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.3.png','Day 3 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.4.png','Day 3 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.2.png','Day 3 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.3.png','Day 3 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day3.4.png','Day 3 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -699,16 +547,10 @@
           <p class="card-excerpt">Don Domingo, a subsistence dairy farmer, shared his story of migration and adversity over a pot of manjar de leche. A visit that became one of the most meaningful of the trip...</p>
           <div class="card-tags"><span class="tag">Culture</span><span class="tag">Reflections</span><span class="tag">Community</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.1.png','Day 4 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.2.png','Day 4 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.3.png','Day 4 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.4.png','Day 4 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.2.png','Day 4 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.3.png','Day 4 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day4.4.png','Day 4 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -727,16 +569,10 @@
           <p class="card-excerpt">We visited an indigenous Tsachila community — painted with red dye, led through a ceremony using all four elements of earth. By the end, something had shifted...</p>
           <div class="card-tags"><span class="tag">Culture</span><span class="tag">Indigenous</span><span class="tag">Reflections</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.1.png','Day 5 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.2.png','Day 5 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.3.png','Day 5 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.4.png','Day 5 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.2.png','Day 5 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.3.png','Day 5 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day5.4.png','Day 5 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -755,16 +591,10 @@
           <p class="card-excerpt">Rosa Morocho came to share her story of migration, discrimination, and reclaiming her indigenous roots. It was the first time she had ever told it to anyone...</p>
           <div class="card-tags"><span class="tag">Culture</span><span class="tag">Indigenous</span><span class="tag">Reflections</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.1.png','Day 6 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.2.png','Day 6 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.3.png','Day 6 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.4.png','Day 6 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.2.png','Day 6 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.3.png','Day 6 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day6.4.png','Day 6 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -783,16 +613,10 @@
           <p class="card-excerpt">A full day of service work — and the day I had to stop. What I want to remember isn't the sickness, but the family who made me rest, and the effort I gave anyway...</p>
           <div class="card-tags"><span class="tag">Service</span><span class="tag">Reflections</span><span class="tag">Perseverance</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.1.png','Day 7 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.2.png','Day 7 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.3.png','Day 7 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.4.png','Day 7 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.2.png','Day 7 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.3.png','Day 7 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day7.4.png','Day 7 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -811,16 +635,10 @@
           <p class="card-excerpt">Milking cows, a jungle hike, a gondola at 13,000 feet, and the realization that I was bringing far more home than I had packed. Ecuador will always have a piece of my heart...</p>
           <div class="card-tags"><span class="tag">Reflections</span><span class="tag">Nature</span><span class="tag">Travel</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.1.png','Day 8 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.2.png','Day 8 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.3.png','Day 8 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.4.png','Day 8 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.2.png','Day 8 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.3.png','Day 8 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day8.4.png','Day 8 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -838,16 +656,10 @@
           <p class="card-excerpt">The flight back. The window seat. The long, quiet hours of processing ten days that changed something fundamental. Ecuador will always have a piece of my heart.</p>
           <div class="card-tags"><span class="tag">Travel</span><span class="tag">Reflections</span></div>
           <div class="card-photo-strip">
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.1.png','Day 9 — Photo 1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.2.png','Day 9 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.3.png','Day 9 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.4.png','Day 9 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
           </div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.2.png','Day 9 — Photo 2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.3.png','Day 9 — Photo 3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-            <div class="strip-slot" onclick="event.stopPropagation();openLightbox('Day9.4.png','Day 9 — Photo 4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
-          </div>
-        </div>
         </div>
       </article>
 
@@ -870,19 +682,8 @@
         <p class="modal-location" id="modal-location"></p>
         <div class="modal-divider"></div>
         <div class="modal-body" id="modal-body"></div>
-        <div class="modal-gallery" id="modal-gallery"></div>
         <div class="modal-tags" id="modal-tags"></div>
       </div>
-    </div>
-  </div>
-
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <div class="lightbox-inner" onclick="event.stopPropagation()">
-      <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
-      <div id="lightbox-content"></div>
-      <p class="lightbox-caption" id="lightbox-caption"></p>
     </div>
   </div>
 
@@ -893,7 +694,7 @@
   <script>
     const entries = [
       {
-        day: 1, captions4th: 'The equator museum exhibits', captions: ['Watching the sunrise over Quito', 'Our guides who made the trip possible', 'Travelling down to San Miguel de Los Bancos'], title: "Arrival",
+        day: 1, title: "Arrival",
         location: "Quito → San Miguel de Los Bancos, Ecuador",
         tags: ["Travel", "Reflections", "Ecuador"],
         body: `<p>As I was travelling on my two flights to Ecuador, I started to really think about why I wanted to come here. I didn't pick this trip. I didn't really know a lot about it because of the fast change of plans — and then I realized that's exactly why I was so excited.</p>
@@ -903,7 +704,7 @@
         <p>Throughout the day we visited two museums explaining the science behind locating the equator, browsed local stores, went on a hike, and had dinner while getting to know one another. Spending the first day touring some of Ecuador's greatest gifts — and meeting the people who would guide us through it — was exactly the right way to begin.</p>`
       },
       {
-        day: 2, captions4th: 'The land around Nido de Vida', captions: ['Marta presenting on Ecuadorian culture', 'Our first look at Nido de Vida farm', "Lenin explaining the farm's philosophy"], title: "First excursion",
+        day: 2, title: "First excursion",
         location: "San Miguel de Los Bancos, Ecuador",
         tags: ["Science", "Culture", "Agriculture"],
         body: `<p>Today was a very full day. We started with breakfast followed by a presentation on Ecuador's culture given by Marta, a family member of those who hosted our trip. She covered a large variety of Ecuadorian traditions, history, and where the country is headed — and although I'm not much of a history enthusiast, this presentation genuinely held my attention throughout.</p>
@@ -914,7 +715,7 @@
         <p>After today's introduction, I knew I had been brought to the right place. I could not wait to start working.</p>`
       },
       {
-        day: 3, captions4th: 'Don Roman and his wife at work', captions: ['Don Roman juicing sugar cane at 5am', 'The copper basin where panela is made', 'The finished panela cooling in molds'], title: "Into the community",
+        day: 3, title: "Into the community",
         location: "San Miguel de Los Bancos, Ecuador",
         tags: ["Culture", "Reflections", "Agriculture"],
         body: `<p>Starting bright and early this morning, our neighbor Don Roman began harvesting sugar cane to demonstrate how panela is made. By 5am he was already at it — juicing the cane through a manual rolling machine, extracting liter after liter of raw juice before transferring it to a large copper basin to heat slowly over several hours.</p>
@@ -924,7 +725,7 @@
         <p>This will be something I hold onto for a long time. We tend to lose sight of what actually matters, and the Ecuadorian culture gave me something like a reality check — a reminder that it is the immeasurable things that count. Not wealth, not square footage, not credentials. Happiness. The kind that comes from living close to what you value.</p>`
       },
       {
-        day: 4, captions4th: 'Service work at Nido de Vida', captions: ["Don Domingo's farm at sunrise", 'Learning to milk the cattle', 'Playing fútbol with the schoolkids'], title: "No agenda, no problem",
+        day: 4, title: "No agenda, no problem",
         location: "San Miguel de Los Bancos, Ecuador",
         tags: ["Culture", "Reflections", "Community"],
         body: `<p>After breakfast we traveled to visit another neighbor, Don Domingo — a local subsistence dairy farmer who had been up since early morning milking his cattle and selling to the milk truck. He set some aside to make us manjar de leche, a sweet cream traditionally served on bread. We watched the slow process of heating and folding in ingredients, the kitchen filling with a warm, caramel smell, until lunch when we finally got to taste it.</p>
@@ -935,7 +736,7 @@
         <p>The afternoon brought a lighter kind of joy. We arrived at the local school during recess and spent time playing soccer — fútbol — with the kids, who needed absolutely no introduction and no common language to make us feel welcome. We finished the day with some service work on the Nido de Vida farm. Rewarding, humbling, and emotional — by far one of my favorites.</p>`
       },
       {
-        day: 5, captions4th: 'The ink ceremony up close', captions: ['Arriving at the Tsachila community', 'The red dye painted on arrival', 'The ceremony hut and surrounding land'], title: "Midpoint",
+        day: 5, title: "Midpoint",
         location: "Tsachila Territory, Ecuador",
         tags: ["Culture", "Indigenous", "Reflections"],
         body: `<p>Immersing ourselves into a different side of Ecuadorian culture, we visited an indigenous Tsachila community. I have always been drawn to learning about indigenous peoples and their ways of life, so this was one of my favorite experiences of the entire trip.</p>
@@ -946,7 +747,7 @@
         <p>The Tsachila remain deeply connected to the land and to their ancestors — a thread running through so much of what I had seen in Ecuador. Using what the land provides, living close to what has always been true. I loved being able to experience even a small part of that culture, and I left with more questions than I came with — which, I've learned, is usually a good sign.</p>`
       },
       {
-        day: 6, captions4th: 'Rosa's children and their heritage', captions: ['Rosa sharing her story with our group', 'Her traditional indigenous clothing', 'The community that welcomed us'], title: "Market day",
+        day: 6, title: "Market day",
         location: "San Miguel de Los Bancos, Ecuador",
         tags: ["Culture", "Indigenous", "Reflections"],
         body: `<p>Rosa Morocho was born and raised in an indigenous family — a large one, large enough that her parents could not afford to feed and house all of their children. So Rosa, still young, made the decision to migrate to the Highlands on her own.</p>
@@ -957,7 +758,7 @@
         <p>I hope that we, listening with open hearts, were even a fraction as meaningful to her as she was to us.</p>`
       },
       {
-        day: 7, captions4th: 'Resting with the Nido de Vida family', captions: ['Service work at Nido de Vida', 'The farm we helped build', 'The Nido de Vida family'], title: "The field visit",
+        day: 7, title: "The field visit",
         location: "Nido de Vida Farm, Ecuador",
         tags: ["Service", "Reflections", "Perseverance"],
         body: `<p>All of Friday was filled with service work at Nido de Vida — the day I had been most excited for. I wanted to see the results of everything we had been building toward, to feel that satisfaction of work that leaves something behind.</p>
@@ -967,7 +768,7 @@
         <p>I went back and forth about whether to include this entry. In the end, I decided it was important for two reasons: it speaks to the character of the people who hosted us, and it speaks to something I want to hold onto about myself. I didn't give up. I gave what I had, and I'm proud of that — sickness and all.</p>`
       },
       {
-        day: 8, captions4th: 'Quito's historic churches', captions: ['Milking cows on the final morning', 'The jungle hike through the canopy', 'The view from 13,000 feet'], title: "The second-to-last day feeling",
+        day: 8, title: "The second-to-last day feeling",
         location: "San Miguel de Los Bancos → Quito, Ecuador",
         tags: ["Reflections", "Nature", "Travel"],
         body: `<p>Our final full day began where so much of this trip had — with farmers and animals and early morning work. We spent time with local dairy farmers, learning their routines and milking cows alongside them. Having an NRES background made it hard not to draw comparisons to American dairy farming: the scale, the methods, the relationship between the farmer and the land. Here, as everywhere on this trip, the difference was intimacy.</p>
@@ -978,7 +779,7 @@
         <p>Some places take a piece of you when you leave. Ecuador did the opposite — it gave me something, and kept giving, and I suspect it will keep giving for years to come. It will always have a piece of my heart.</p>`
       },
       {
-        day: 9, captions4th: 'The view from the plane window', captions: ['The last morning in Quito', 'The gondola up the mountainside', 'Heading home — changed'], title: "Coming home",
+        day: 9, title: "Coming home",
         location: "Quito → Home",
         tags: ["Travel", "Reflections"],
         body: `<p>The flights home were long and quiet. I had a window seat and I used it.</p>
@@ -989,121 +790,16 @@
       }
     ];
 
-    function renderSlot(container, src, caption, height, radius) {
-      const img = new Image();
-      const placeholder = container.querySelector('.gallery-placeholder, .photo-placeholder');
-      img.onload = () => {
-        container.innerHTML = `<img src="${src}" alt="${caption}" style="width:100%;height:${height}px;object-fit:cover;display:block;border-radius:${radius};cursor:pointer;" onclick="openLightbox('${src}','${caption}')" />`;
-      };
-      img.onerror = () => { /* keep placeholder */ };
-      img.src = src;
-    }
-
     function openModal(index) {
       const e = entries[index];
-      const d = e.day;
       document.getElementById('modal-eyebrow').innerHTML = `<span class="day-num">Day ${e.day}</span>&nbsp; Study abroad journal`;
       document.getElementById('modal-title').textContent = e.title;
       document.getElementById('modal-location').innerHTML = `<span class="loc-dot"></span> ${e.location}`;
       document.getElementById('modal-body').innerHTML = e.body;
       document.getElementById('modal-tags').innerHTML = e.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-      // Cover photo
-      const coverSrc = `Day${d}-Cover.png`;
-      const photoel = document.getElementById('modal-photo');
-      photoel.style.cursor = 'pointer';
-      photoel.onclick = () => openLightbox(coverSrc, e.title + ' — Cover photo');
-      photoel.innerHTML = `<div class="photo-placeholder" style="opacity:0.35;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:var(--accent)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
-        <span style="font-size:12px;color:var(--accent)">Day${d}-Cover.png</span>
-      </div>`;
-      renderSlot(photoel, coverSrc, e.title + ' — Cover photo', 260, '0');
-
-      // Strip gallery
-      const allCaps = [...(e.captions || []), e.captions4th || 'Add a caption'];
-      const gallery = document.getElementById('modal-gallery');
-      gallery.innerHTML = `
-        <p class="modal-gallery-label">Photos from this day</p>
-        <div class="modal-gallery-grid">
-          ${[1,2,3,4].map(n => `
-          <div class="gallery-slot" id="modal-strip-${d}-${n}" onclick="openLightbox('Day${d}.${n}.png','${e.title} — Photo ${n}')">
-            <div class="gallery-placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Day${d}.${n}.png</span>
-            </div>
-            <p class="gallery-caption">${allCaps[n-1] || 'Add a caption for this photo'}</p>
-          </div>`).join('')}
-        </div>`;
-
-      // Try loading each strip image
-      [1,2,3,4].forEach(n => {
-        const slot = document.getElementById(`modal-strip-${d}-${n}`);
-        if (slot) renderSlot(slot, `Day${d}.${n}.png`, `${e.title} — Photo ${n}`, 180, '8px');
-      });
-
-      // Also try loading strip thumbnails on the card
-      [1,2,3,4].forEach(n => {
-        const cardSlots = document.querySelectorAll(`.strip-slot`);
-        cardSlots.forEach(s => {
-          const oc = s.getAttribute('onclick') || '';
-          if (oc.includes(`Day${d}.${n}.png`)) {
-            const img = new Image();
-            img.onload = () => { s.innerHTML = `<img src="Day${d}.${n}.png" style="width:100%;height:100%;object-fit:cover;display:block;" />`; };
-            img.src = `Day${d}.${n}.png`;
-          }
-        });
-      });
-
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
-    function openLightbox(src, caption) {
-      const lb = document.getElementById('lightbox');
-      const content = document.getElementById('lightbox-content');
-      document.getElementById('lightbox-caption').textContent = caption;
-      content.innerHTML = `<div class="lightbox-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;opacity:0.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-        <span style="font-size:13px;">${src}</span>
-      </div>`;
-      const img = new Image();
-      img.onload = () => { content.innerHTML = `<img src="${src}" alt="${caption}" style="width:100%;max-height:80vh;object-fit:contain;border-radius:8px;display:block;" />`; };
-      img.onerror = () => { /* keep placeholder */ };
-      img.src = src;
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
-    }
-
-    // Load all card strip images on page load
-    window.addEventListener('load', () => {
-      document.querySelectorAll('.strip-slot').forEach(slot => {
-        const oc = slot.getAttribute('onclick') || '';
-        const match = oc.match(/openLightbox\('([^']+)'/);
-        if (match) {
-          const src = match[1];
-          const img = new Image();
-          img.onload = () => { slot.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;" />`; };
-          img.src = src;
-        }
-      });
-      // Load card cover photos too
-      document.querySelectorAll('.day-card').forEach((card, i) => {
-        const entry = entries[i];
-        if (!entry) return;
-        const photoDiv = card.querySelector('.card-photo');
-        if (!photoDiv) return;
-        const src = `Day${entry.day}-Cover.png`;
-        const img = new Image();
-        img.onload = () => {
-          photoDiv.innerHTML = `<img src="${src}" style="width:100%;height:190px;object-fit:cover;display:block;" />`;
-        };
-        img.src = src;
-      });
-    });
 
     function closeModal() {
       document.getElementById('modal').classList.remove('open');
