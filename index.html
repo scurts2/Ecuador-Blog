@@ -698,6 +698,7 @@
         day: 1, title: "Arrival",
         location: "Quito → San Miguel de Los Bancos, Ecuador",
         tags: ["Travel", "Reflections", "Ecuador"],
+        coverImage: "Day1-Cover.png",
         body: `<p>As I was travelling on my two flights to Ecuador, I started to really think about why I wanted to come here. I didn't pick this trip. I didn't really know a lot about it because of the fast change of plans — and then I realized that's exactly why I was so excited.</p>
         <p>Because we were initially going to Bolivia, I had spent hours upon hours since May preparing: learning about the culture, customs, and the service work we'd be doing. Since I only had a little over a month to prepare for Ecuador, all of the excitement was held in the unknown. I could not wait to see what it had to offer.</p>
         <blockquote class="pull-quote">All of the excitement was held in the unknown — and that turned out to be the best reason to go.</blockquote>
@@ -798,6 +799,12 @@
       document.getElementById('modal-location').innerHTML = `<span class="loc-dot"></span> ${e.location}`;
       document.getElementById('modal-body').innerHTML = e.body;
       document.getElementById('modal-tags').innerHTML = e.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const photoEl = document.getElementById('modal-photo');
+      if (e.coverImage) {
+        photoEl.innerHTML = `<img src="${e.coverImage}" alt="Day ${e.day} - ${e.title}" />`;
+      } else {
+        photoEl.innerHTML = `<div class="photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:var(--accent)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg><span style="font-size:12px;color:var(--accent)">Add your photo here</span></div>`;
+      }
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
