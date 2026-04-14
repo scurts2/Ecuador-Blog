@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Abroad Journal</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FAF6F1;
+      --ink: #2C1A0E;
+      --ink-muted: #7A5C48;
+      --ink-faint: #B89A86;
+      --accent: #C0390E;
+      --accent-light: #FDEEE9;
+      --accent-mid: #E8724A;
+      --border: rgba(44,26,14,0.12);
+      --card-bg: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.015) 40px,
+        rgba(255,255,255,0.015) 80px
+      );
+    }
+
+    .header-eyebrow {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 1rem;
+    }
+
+    header h1 {
+      font-family: 'League Spartan', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    header h1 em {
+      font-style: normal;
+      color: var(--accent-mid);
+    }
+
+    .header-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .header-pill {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(247,243,236,0.6);
+      border: 0.5px solid rgba(247,243,236,0.2);
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+
+    .header-desc {
+      font-size: 15px;
+      color: rgba(247,243,236,0.65);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Nav / Filter ── */
+    .filter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250,246,241,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .filter-btn:hover { background: rgba(44,26,14,0.06); color: var(--ink); }
+
+    .filter-btn.active {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    /* ── Grid ── */
+    .grid-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ── Day card ── */
+    .day-card {
+      background: var(--card-bg);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .day-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(44,26,14,0.1);
+    }
+
+    .day-card.hidden { display: none; }
+
+    .card-photo {
+      width: 100%;
+      height: 190px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+    }
+
+    .photo-placeholder svg { width: 28px; height: 28px; }
+    .photo-placeholder span { font-size: 11px; color: var(--accent); }
+
+    .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .day-num {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .card-title {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .card-location {
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .loc-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-mid);
+      flex-shrink: 0;
+    }
+
+    .card-excerpt {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--ink-muted);
+      flex: 1;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      border: 0.5px solid var(--border);
+      color: var(--ink-faint);
+    }
+
+    .card-photo-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-top: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .strip-slot {
+      aspect-ratio: 1;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .strip-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .strip-slot svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.25;
+      color: var(--accent);
+    }
+
+    /* ── Full entry modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(44,26,14,0.6);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--cream);
+      border-radius: 20px;
+      max-width: 660px;
+      width: 100%;
+      margin: auto;
+      overflow: hidden;
+      position: relative;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-photo {
+      width: 100%;
+      height: 260px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .modal-photo .photo-placeholder { opacity: 0.35; }
+
+    .modal-content { padding: 2rem 2rem 2.5rem; }
+
+    .modal-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .modal-title {
+      font-family: 'League Spartan', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-location {
+      font-size: 13px;
+      color: var(--ink-faint);
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent-mid);
+      margin-bottom: 1.75rem;
+    }
+
+    .modal-body {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--ink);
+    }
+
+    .modal-body p { margin-bottom: 1.2rem; }
+
+    .pull-quote {
+      border-left: 2px solid var(--accent-mid);
+      padding-left: 1.25rem;
+      margin: 1.75rem 0;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(44,26,14,0.5);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      line-height: 1;
+      transition: background 0.15s;
+      z-index: 1;
+    }
+
+    .close-btn:hover { background: rgba(44,26,14,0.8); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      font-size: 12px;
+      color: var(--ink-faint);
+      border-top: 0.5px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 600px) {
+      .days-grid { grid-template-columns: 1fr; }
+      header { padding: 2.5rem 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <p class="header-eyebrow">Personal archive</p>
+    <h1>Study Abroad<br><em>Journal</em></h1>
+    <p class="header-desc">Ten days of daily reflections from a study abroad trip to Ecuador — the people, the land, and everything brought home.</p>
+    <div class="header-meta">
+      <span class="header-pill">9 days</span>
+      <span class="header-pill">Ecuador</span>
+      <span class="header-pill">Study abroad</span>
+    </div>
+  </header>
+
+  <nav class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All days</button>
+    <button class="filter-btn" data-filter="culture">Culture</button>
+    <button class="filter-btn" data-filter="science">Science</button>
+    <button class="filter-btn" data-filter="reflections">Reflections</button>
+    <button class="filter-btn" data-filter="food">Food</button>
+  </nav>
+
+  <main class="grid-container">
+    <div class="days-grid" id="grid">
+
+      <!-- Day 1 -->
+      <article class="day-card" data-tags="travel reflections" onclick="openModal(0)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 1</span></div>
+          <p class="card-title">Arrival</p>
+          <p class="card-location"><span class="loc-dot"></span>Quito → San Miguel de Los Bancos, Ecuador</p>
+          <p class="card-excerpt">All of the excitement was held in the unknown. We landed in Quito around 5am and watched the sunrise over the mountains — an exhausting, fun-filled first day of tourism and introductions...</p>
+          <div class="card-tags"><span class="tag">Travel</span><span class="tag">Reflections</span><span class="tag">Ecuador</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 2 -->
+      <article class="day-card" data-tags="science field-work" onclick="openModal(1)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 2</span></div>
+          <p class="card-title">First excursion</p>
+          <p class="card-location"><span class="loc-dot"></span>San Miguel de Los Bancos, Ecuador</p>
+          <p class="card-excerpt">A presentation on Ecuador's culture, a farm with a philosophy unlike anything back home. As an NRES major, Nido de Vida's way of thinking resonated with me immediately...</p>
+          <div class="card-tags"><span class="tag">Science</span><span class="tag">Culture</span><span class="tag">Agriculture</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 3 -->
+      <article class="day-card" data-tags="culture reflections" onclick="openModal(2)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 3</span></div>
+          <p class="card-title">Into the community</p>
+          <p class="card-location"><span class="loc-dot"></span>San Miguel de Los Bancos, Ecuador</p>
+          <p class="card-excerpt">At 5am, neighbor Don Roman began harvesting sugar cane to show us how panela is made. A lesson in craft, hard work, and a kind of happiness that doesn't translate to dollars...</p>
+          <div class="card-tags"><span class="tag">Culture</span><span class="tag">Reflections</span><span class="tag">Agriculture</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 4 -->
+      <article class="day-card" data-tags="food reflections" onclick="openModal(3)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 4</span></div>
+          <p class="card-title">No agenda, no problem</p>
+          <p class="card-location"><span class="loc-dot"></span>San Miguel de Los Bancos, Ecuador</p>
+          <p class="card-excerpt">Don Domingo, a subsistence dairy farmer, shared his story of migration and adversity over a pot of manjar de leche. A visit that became one of the most meaningful of the trip...</p>
+          <div class="card-tags"><span class="tag">Culture</span><span class="tag">Reflections</span><span class="tag">Community</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 5 -->
+      <article class="day-card" data-tags="science culture" onclick="openModal(4)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 5</span></div>
+          <p class="card-title">Midpoint</p>
+          <p class="card-location"><span class="loc-dot"></span>Tsachila Territory, Ecuador</p>
+          <p class="card-excerpt">We visited an indigenous Tsachila community — painted with red dye, led through a ceremony using all four elements of earth. By the end, something had shifted...</p>
+          <div class="card-tags"><span class="tag">Culture</span><span class="tag">Indigenous</span><span class="tag">Reflections</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 6 -->
+      <article class="day-card" data-tags="culture food" onclick="openModal(5)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 6</span></div>
+          <p class="card-title">Market day</p>
+          <p class="card-location"><span class="loc-dot"></span>San Miguel de Los Bancos, Ecuador</p>
+          <p class="card-excerpt">Rosa Morocho came to share her story of migration, discrimination, and reclaiming her indigenous roots. It was the first time she had ever told it to anyone...</p>
+          <div class="card-tags"><span class="tag">Culture</span><span class="tag">Indigenous</span><span class="tag">Reflections</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 7 -->
+      <article class="day-card" data-tags="science reflections" onclick="openModal(6)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 7</span></div>
+          <p class="card-title">The field visit</p>
+          <p class="card-location"><span class="loc-dot"></span>Nido de Vida Farm, Ecuador</p>
+          <p class="card-excerpt">A full day of service work — and the day I had to stop. What I want to remember isn't the sickness, but the family who made me rest, and the effort I gave anyway...</p>
+          <div class="card-tags"><span class="tag">Service</span><span class="tag">Reflections</span><span class="tag">Perseverance</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 8 -->
+      <article class="day-card" data-tags="culture reflections" onclick="openModal(7)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Day 8</span></div>
+          <p class="card-title">The second-to-last day feeling</p>
+          <p class="card-location"><span class="loc-dot"></span>San Miguel de Los Bancos → Quito, Ecuador</p>
+          <p class="card-excerpt">Milking cows, a jungle hike, a gondola at 13,000 feet, and the realization that I was bringing far more home than I had packed. Ecuador will always have a piece of my heart...</p>
+          <div class="card-tags"><span class="tag">Reflections</span><span class="tag">Nature</span><span class="tag">Travel</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day-card" data-tags="travel reflections" onclick="openModal(8)">
+        <div class="card-photo">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+            <span>Add photo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-header"><span class="day-num">Departure</span></div>
+          <p class="card-title">Coming home</p>
+          <p class="card-location"><span class="loc-dot"></span>Quito → Home</p>
+          <p class="card-excerpt">The flight back. The window seat. The long, quiet hours of processing ten days that changed something fundamental. Ecuador will always have a piece of my heart.</p>
+          <div class="card-tags"><span class="tag">Travel</span><span class="tag">Reflections</span></div>
+          <div class="card-photo-strip">
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="strip-slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+    <div class="modal" id="modal-inner">
+      <button class="close-btn" onclick="closeModal()">&#x2715;</button>
+      <div class="modal-photo" id="modal-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:var(--accent)"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1-2h4l1 2"/></svg>
+          <span style="font-size:12px;color:var(--accent)">Add your photo here</span>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="modal-eyebrow" id="modal-eyebrow"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-location" id="modal-location"></p>
+        <div class="modal-divider"></div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-tags" id="modal-tags"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Study Abroad Journal &nbsp;&middot;&nbsp; Personal Archive
+  </footer>
+
+  <script>
+    const entries = [
+      {
+        day: 1, title: "Arrival",
+        location: "Quito → San Miguel de Los Bancos, Ecuador",
+        tags: ["Travel", "Reflections", "Ecuador"],
+        body: `<p>As I was travelling on my two flights to Ecuador, I started to really think about why I wanted to come here. I didn't pick this trip. I didn't really know a lot about it because of the fast change of plans — and then I realized that's exactly why I was so excited.</p>
+        <p>Because we were initially going to Bolivia, I had spent hours upon hours since May preparing: learning about the culture, customs, and the service work we'd be doing. Since I only had a little over a month to prepare for Ecuador, all of the excitement was held in the unknown. I could not wait to see what it had to offer.</p>
+        <blockquote class="pull-quote">All of the excitement was held in the unknown — and that turned out to be the best reason to go.</blockquote>
+        <p>We landed in Quito around 5:00 in the morning and got to watch the sunrise over the mountains. Our local guide Bibi, her wife Lucia, brother-in-law Lenin, and nephew Brandon picked us up from the airport, made their introductions, and then spent the day travelling down the mountain of Quito to the valley of San Miguel de Los Bancos.</p>
+        <p>Throughout the day we visited two museums explaining the science behind locating the equator, browsed local stores, went on a hike, and had dinner while getting to know one another. Spending the first day touring some of Ecuador's greatest gifts — and meeting the people who would guide us through it — was exactly the right way to begin.</p>`
+      },
+      {
+        day: 2, title: "First excursion",
+        location: "San Miguel de Los Bancos, Ecuador",
+        tags: ["Science", "Culture", "Agriculture"],
+        body: `<p>Today was a very full day. We started with breakfast followed by a presentation on Ecuador's culture given by Marta, a family member of those who hosted our trip. She covered a large variety of Ecuadorian traditions, history, and where the country is headed — and although I'm not much of a history enthusiast, this presentation genuinely held my attention throughout.</p>
+        <p>Marta touched on topics we had briefly discussed in class but took them considerably deeper. One of the most fascinating was the dollarization of the Ecuadorian Sucre in 2000 — a decision that reshaped the economy in ways the country is still navigating. She also spoke at length about the central role of agriculture, and how deeply it is woven into both daily life and national identity.</p>
+        <p>After lunch we headed to the Nido de Vida farm, where we would be spending the next ten days working. Their mission is to live from the land with minimal environmental impact. During our introduction, Lenin explained their guiding motto:</p>
+        <blockquote class="pull-quote">If something is there, it is meant to be there. If something does not succeed, it was not meant to be there. The land will provide.</blockquote>
+        <p>As a Natural Resource and Environmental Science major, I found this philosophy deeply resonant — and refreshingly uncommon compared to how we tend to relate to land back in the States. The Ecuadorian way of life, as I was beginning to understand it, is simple but extraordinarily well-considered: take what you need, no more; live from the land; trust it to provide.</p>
+        <p>After today's introduction, I knew I had been brought to the right place. I could not wait to start working.</p>`
+      },
+      {
+        day: 3, title: "Into the community",
+        location: "San Miguel de Los Bancos, Ecuador",
+        tags: ["Culture", "Reflections", "Agriculture"],
+        body: `<p>Starting bright and early this morning, our neighbor Don Roman began harvesting sugar cane to demonstrate how panela is made. By 5am he was already at it — juicing the cane through a manual rolling machine, extracting liter after liter of raw juice before transferring it to a large copper basin to heat slowly over several hours.</p>
+        <p>The process is patient and physical. As the juice reduces, it thickens into a deep caramel consistency before being poured into molds or shaped into candy. Watching it come together, you understand immediately how much time and labor goes into something most people never think twice about.</p>
+        <blockquote class="pull-quote">Despite hours of strenuous work, Don Roman and his wife made very little off each batch — and yet happiness was the most visible thing in the room.</blockquote>
+        <p>A common theme I had been noticing throughout the trip was the presence of hard work — quiet, unglamorous, sustained effort as a simple fact of daily life. But equally present was something harder to name: a genuine gratitude and contentment that didn't seem to depend on comfort or income. By an American measure, life here might look modest. By any honest measure, it looked full.</p>
+        <p>This will be something I hold onto for a long time. We tend to lose sight of what actually matters, and the Ecuadorian culture gave me something like a reality check — a reminder that it is the immeasurable things that count. Not wealth, not square footage, not credentials. Happiness. The kind that comes from living close to what you value.</p>`
+      },
+      {
+        day: 4, title: "No agenda, no problem",
+        location: "San Miguel de Los Bancos, Ecuador",
+        tags: ["Culture", "Reflections", "Community"],
+        body: `<p>After breakfast we traveled to visit another neighbor, Don Domingo — a local subsistence dairy farmer who had been up since early morning milking his cattle and selling to the milk truck. He set some aside to make us manjar de leche, a sweet cream traditionally served on bread. We watched the slow process of heating and folding in ingredients, the kitchen filling with a warm, caramel smell, until lunch when we finally got to taste it.</p>
+        <p>While it cooked, Don Domingo shared his story. He had originally lived in Loja, Ecuador, but traveled to San Miguel at a fairly young age — a migration that came with real adversity. One detail that stopped me: in those days, traveling back and forth meant crossing seven rivers, every time, on foot.</p>
+        <blockquote class="pull-quote">He was soft-spoken, very knowledgeable, and a hard worker — and he reminded me immediately of my grandfather.</blockquote>
+        <p>I was hours from my small Illinois hometown, and yet something about Don Domingo brought me right back to it. My grandfather, who I had recently lost, was an avid traveler and one of my biggest supporters when I decided to make this trip. Not being able to share it with him had weighed on me in the days before departure — a quiet grief sitting alongside all the excitement.</p>
+        <p>Sitting with Don Domingo, watching him move through his kitchen with the same unhurried confidence my grandfather always had, I felt something settle. It was a comfort, and something deeper than comfort — a sign, in my heart, that Gramps really was with me on this trip.</p>
+        <p>The afternoon brought a lighter kind of joy. We arrived at the local school during recess and spent time playing soccer — fútbol — with the kids, who needed absolutely no introduction and no common language to make us feel welcome. We finished the day with some service work on the Nido de Vida farm. Rewarding, humbling, and emotional — by far one of my favorites.</p>`
+      },
+      {
+        day: 5, title: "Midpoint",
+        location: "Tsachila Territory, Ecuador",
+        tags: ["Culture", "Indigenous", "Reflections"],
+        body: `<p>Immersing ourselves into a different side of Ecuadorian culture, we visited an indigenous Tsachila community. I have always been drawn to learning about indigenous peoples and their ways of life, so this was one of my favorite experiences of the entire trip.</p>
+        <p>Upon arrival, we participated in a relaxation exercise and were painted with red dye from a plant as a gesture of gratitude for being welcomed onto their land. Then the community leader came around and applied a second, clear dye to our hands — one that takes time to develop. The belief is that the darker and faster the ink appears, the better the energy you carry within you.</p>
+        <p>I'll be honest: I wasn't fully convinced at first. I had gotten sick earlier on the trip and wasn't feeling my best that day. My ink was dull and slow to appear. Comparing it to another student in our group — someone visibly energetic, extroverted, and radiating enthusiasm — her ink came in dark almost immediately. It gave me pause, but I held my skepticism.</p>
+        <blockquote class="pull-quote">As I let myself immerse into the ceremony, I became genuinely relaxed and focused. By the end, the ink on my hand was much more apparent.</blockquote>
+        <p>The ceremony itself was led in an underground hut. The leader explained he would work with all four elements of earth — fire, water, earth, and air — to invite in good energy and spirits. It works, he said, only for those who truly concentrate and open themselves to it. I decided to try.</p>
+        <p>The Tsachila remain deeply connected to the land and to their ancestors — a thread running through so much of what I had seen in Ecuador. Using what the land provides, living close to what has always been true. I loved being able to experience even a small part of that culture, and I left with more questions than I came with — which, I've learned, is usually a good sign.</p>`
+      },
+      {
+        day: 6, title: "Market day",
+        location: "San Miguel de Los Bancos, Ecuador",
+        tags: ["Culture", "Indigenous", "Reflections"],
+        body: `<p>Rosa Morocho was born and raised in an indigenous family — a large one, large enough that her parents could not afford to feed and house all of their children. So Rosa, still young, made the decision to migrate to the Highlands on her own.</p>
+        <p>She came to speak with our group about what that journey cost her. During her travels she stayed and worked for two different families, neither of whom treated her well. She was looked down on because of her indigenous heritage — dismissed, diminished, made to feel that where she came from was something to be ashamed of. Over time, under that weight, she began to believe it. She told us story after story of the discrimination she and others from her community had endured, quietly, without anyone standing up for them.</p>
+        <blockquote class="pull-quote">Rosa had never told her story before. We were the first people she had ever shared it with.</blockquote>
+        <p>She eventually met her husband, built a life, and had three children. It was her children who brought her back. As they grew older and began asking questions about who they were and where they came from, Rosa found herself at a crossroads. She had sworn, at her lowest point, that she would never return to her roots. But her children needed to know those roots — and so she began to find her way back. She started wearing her traditional clothing again. She began teaching them words from the native language.</p>
+        <p>The most striking thing about the entire conversation was learning that our group was the first audience she had ever trusted with this story. In the United States we're taught to adapt, overcome, and then share — resilience is something we're encouraged to perform openly. But Rosa had carried this alone for years, too hurt and too ashamed to speak it aloud. Sitting in that room, listening, I kept thinking about how much courage it must have taken to finally say it out loud.</p>
+        <p>I hope that we, listening with open hearts, were even a fraction as meaningful to her as she was to us.</p>`
+      },
+      {
+        day: 7, title: "The field visit",
+        location: "Nido de Vida Farm, Ecuador",
+        tags: ["Service", "Reflections", "Perseverance"],
+        body: `<p>All of Friday was filled with service work at Nido de Vida — the day I had been most excited for. I wanted to see the results of everything we had been building toward, to feel that satisfaction of work that leaves something behind.</p>
+        <p>The problem was that I had been sick for a few days by this point, and nothing I had brought with me was helping. I tried to push through it — anyone who knows me knows I'm usually the last person to stop. But by midway through our longest work day, my body made the decision for me.</p>
+        <blockquote class="pull-quote">What I want to remember, looking back on this years from now, isn't that I was sick. It's that I gave everything I had — and that this family took care of me when I couldn't.</blockquote>
+        <p>Leaving my classmates on the hardest day of work was difficult in a way that's hard to explain. But the Nido de Vida family wouldn't hear of me pushing further. They stepped in with a quiet, matter-of-fact warmth — the kind of hospitality that doesn't make a fuss but simply insists. Each member of that family had offered something different and genuine to our group over the days we spent there, and that day it was rest, given kindly.</p>
+        <p>I went back and forth about whether to include this entry. In the end, I decided it was important for two reasons: it speaks to the character of the people who hosted us, and it speaks to something I want to hold onto about myself. I didn't give up. I gave what I had, and I'm proud of that — sickness and all.</p>`
+      },
+      {
+        day: 8, title: "The second-to-last day feeling",
+        location: "San Miguel de Los Bancos → Quito, Ecuador",
+        tags: ["Reflections", "Nature", "Travel"],
+        body: `<p>Our final full day began where so much of this trip had — with farmers and animals and early morning work. We spent time with local dairy farmers, learning their routines and milking cows alongside them. Having an NRES background made it hard not to draw comparisons to American dairy farming: the scale, the methods, the relationship between the farmer and the land. Here, as everywhere on this trip, the difference was intimacy.</p>
+        <p>From there we headed into the jungle for a challenging hike in search of native birds. We didn't find them — but what we found instead were views that made the effort worthwhile many times over. The jungle at that elevation has a stillness to it that is difficult to describe and impossible to forget.</p>
+        <p>We made our way back to Quito for a final stretch of historical tourism: the governmental buildings, the sweeping churches, the architecture of a city that has been through a great deal and is still standing proudly. And then, as a final exclamation point, a gondola ride up the mountainside to 13,000 feet of altitude — the whole country laid out below us, the clouds close enough to feel.</p>
+        <blockquote class="pull-quote">As I packed my bags, I was struck by how much I was internally bringing home. I had gone to Ecuador. I was coming back changed.</blockquote>
+        <p>Ten days. It doesn't sound like enough time to be transformed, and yet here I was: more connected to nature than I had ever felt, holding a whole new respect for agriculture, for indigenous communities, for the quiet dignity of a life lived close to the land. I had formed a new family across the sea. I had made friends I hadn't anticipated. My morals and my sense of what matters had grown in ways I was still finding language for.</p>
+        <p>Some places take a piece of you when you leave. Ecuador did the opposite — it gave me something, and kept giving, and I suspect it will keep giving for years to come. It will always have a piece of my heart.</p>`
+      },
+      {
+        day: 9, title: "Coming home",
+        location: "Quito → Home",
+        tags: ["Travel", "Reflections"],
+        body: `<p>The flights home were long and quiet. I had a window seat and I used it.</p>
+        <p>Ten days doesn't sound like much. But I had milked cows and hiked through jungle and stood at 13,000 feet with the clouds below me. I had sat with Don Roman at 5am and watched sugar cane become something sweet. I had heard Rosa tell her story for the very first time. I had felt, in a farmhouse in San Miguel de Los Bancos, that my grandfather was somehow still traveling alongside me.</p>
+        <blockquote class="pull-quote">Some places take a piece of you when you leave. Ecuador did the opposite — it gave me something, and I suspect it will keep giving for years to come.</blockquote>
+        <p>I came home with a suitcase, a full journal, and a set of values that had been quietly rearranged. More open. More grateful. More connected to the land and to the people who live honestly from it.</p>
+        <p>Ecuador will always have a piece of my heart.</p>`
+      }
+    ];
+
+    function openModal(index) {
+      const e = entries[index];
+      document.getElementById('modal-eyebrow').innerHTML = `<span class="day-num">Day ${e.day}</span>&nbsp; Study abroad journal`;
+      document.getElementById('modal-title').textContent = e.title;
+      document.getElementById('modal-location').innerHTML = `<span class="loc-dot"></span> ${e.location}`;
+      document.getElementById('modal-body').innerHTML = e.body;
+      document.getElementById('modal-tags').innerHTML = e.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modal')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.day-card').forEach(card => {
+          if (filter === 'all' || card.dataset.tags.includes(filter)) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
